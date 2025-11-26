@@ -12,6 +12,10 @@
 		"html": false
 	},
 	"attributes": {
+		"reviewTitle": {
+			"type": "string",
+			"default": ""
+		},
 		"reviewId": {
 			"type": "number",
 			"default": 0

@@ -25,7 +25,7 @@ const ReviewElement = () => {
   \******************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/chaser-site-links","version":"0.1.0","title":"Chaser Site Links","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"attributes":{"reviewId":{"type":"number","default":0}},"textdomain":"chaser-site-links","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"create-block/chaser-site-links","version":"0.1.0","title":"Chaser Site Links","category":"widgets","icon":"smiley","description":"Example block scaffolded with Create Block tool.","example":{},"supports":{"html":false},"attributes":{"reviewTitle":{"type":"string","default":""},"reviewId":{"type":"number","default":0}},"textdomain":"chaser-site-links","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","render":"file:./render.php","viewScript":"file:./view.js"}');
 
 /***/ }),
 
@@ -57,14 +57,33 @@ __webpack_require__.r(__webpack_exports__);
 
 function Edit() {
   const [searchTerm, setSearchTerm] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.useState)('');
-  const reviews = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
-    return select('core').getEntityRecords('postType', 'review', {
-      per_page: 5,
-      search: searchTerm
-    });
-  }, [searchTerm]);
+  const args = {
+    per_page: 1,
+    orderby: 'date',
+    order: 'desc',
+    search: 'bitstarz'
+  };
+  const {
+    singleReview,
+    isResolving
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_3__.useSelect)(select => {
+    const records = select('core').getEntityRecords('postType', 'review', args);
+    const isResolving = !records && select('core/data').isResolving('core', 'getEntityRecords', ['postType', 'review', args]);
+    return {
+      singleReview: records ? records[0] : null,
+      isResolving: isResolving
+    };
+  });
   const handleClick = () => {
-    console.log('handling the click', reviews);
+    console.log('handleing');
+    const {
+      excerpt,
+      id,
+      link,
+      title
+    } = singleReview;
+    console.log(excerpt, id, link, title);
+    console.log('isResolving: ', isResolving);
   };
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.SearchControl, {
@@ -74,7 +93,7 @@ function Edit() {
       placeholder: "Type to search reviews..."
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
       onClick: handleClick,
-      children: "ClickME!"
+      children: "CLICK"
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_ReviewElement__WEBPACK_IMPORTED_MODULE_4__["default"], {})]
   });
 }

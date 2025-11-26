@@ -8,18 +8,40 @@ import ReviewElement from './ReviewElement';
 function Edit() {
 	const [searchTerm, setSearchTerm] = useState('');
 
-	const reviews = useSelect(
-		select => {
-			return select('core').getEntityRecords('postType', 'review', { per_page: 5, search: searchTerm });
-		},
-		[searchTerm]
-	);
+	const args = {
+		per_page: 1,
+		orderby: 'date',
+		order: 'desc',
+		search: 'bitstarz'
+	}
 
+	const { singleReview, isResolving } = useSelect((select) => {
+		const records = select('core').getEntityRecords(
+			'postType',
+			'review',
+			args
+		);
 
+		const isResolving = !records && select('core/data').isResolving(
+			'core',
+			'getEntityRecords',
+			['postType', 'review', args]
+		);
+
+		return {
+			singleReview: records ? records[0] : null,
+			isResolving: isResolving
+		}
+	})
 
 	const handleClick = () => {
-		console.log('handling the click', reviews);
+		console.log('handleing')
+
+		const { excerpt, id, link, title } = singleReview;
+		console.log(excerpt, id, link, title);
+		console.log('isResolving: ', isResolving)
 	}
+
 
 	return (
 		<div>
@@ -29,7 +51,7 @@ function Edit() {
 				onChange={(value) => setSearchTerm(value)}
 				placeholder="Type to search reviews..."
 			/>
-			<button onClick={handleClick}>ClickME!</button>
+			<button onClick={handleClick}>CLICK</button>
 			<ReviewElement />
 		</div>
 	);

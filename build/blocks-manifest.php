@@ -17,6 +17,10 @@ return array(
 			'html' => false
 		),
 		'attributes' => array(
+			'reviewTitle' => array(
+				'type' => 'string',
+				'default' => ''
+			),
 			'reviewId' => array(
 				'type' => 'number',
 				'default' => 0
